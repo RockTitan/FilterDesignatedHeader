@@ -64,7 +64,7 @@ namespace FilterDesignatedHeader
             {
                 OpenFileDialog file = new OpenFileDialog
                 {
-                    Filter = "Excel files (*.xlsx, *.xls)|*.xlsx;*.xls|All files (*.*)|*.*"
+                    Filter = "Excel files (*.xlsx, *.xlsm, *.xls)|*.xlsx;*.xlsm;*.xls|All files (*.*)|*.*"
                 };
                 file.ShowDialog();
                 if (file.FileName == string.Empty || file == null)
@@ -188,6 +188,9 @@ namespace FilterDesignatedHeader
 
         private void initailExcel()
         {
+            ExcelUtility excelUtility = new ExcelUtility();
+            excelUtility.ClearExcelProcess();
+
             //檢查PC有無Excel在執行
             bool flag = false;
             foreach (var item in Process.GetProcesses())
@@ -209,7 +212,7 @@ namespace FilterDesignatedHeader
                 _Excel = obj as Excel.Application;
             }
 
-            this._Excel.Visible = false;//設false效能會比較好
+            //this._Excel.Visible = false;//設false效能會比較好
         }
 
         private void getSheetsName()
@@ -289,7 +292,7 @@ namespace FilterDesignatedHeader
                 range = (Excel.Range)sheet.Cells[1, col];
                 if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
                 {
-                    if (range.Value2.ToString().Trim() == "結果" || range.Value2.ToString().Trim() == "Result")
+                    if (range.Value2.ToString().Trim() == "結果" || range.Value2.ToString().Trim().ToUpper() == "RESULT")
                     {
                         for (int row = 2; row <= totalRows; row++)
                         {
