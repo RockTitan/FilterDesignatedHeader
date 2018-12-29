@@ -29,7 +29,11 @@ namespace FilterDesignatedHeader
         Excel.Range range = null;
 
         List<SheetItems> sheetItems = new List<SheetItems>();
+        DataTable dt = new DataTable();
+        private bool isFilter = false;
 
+
+        #region Events
         private void MainForm_Load(object sender, EventArgs e)
         {
             try
@@ -56,6 +60,11 @@ namespace FilterDesignatedHeader
         private void checkBox_Topmost_CheckedChanged(object sender, EventArgs e)
         {
             checkTopmost();
+        }
+
+        private void checkBox_Filter_CheckedChanged(object sender, EventArgs e)
+        {
+            checkFilter();
         }
 
         private void button_SelectFile_Click(object sender, EventArgs e)
@@ -96,6 +105,7 @@ namespace FilterDesignatedHeader
         {
             try
             {
+                dt = null;
                 listBox_SelectItems.Items.Clear();
                 foreach (var item in sheetItems)
                 {
@@ -104,6 +114,13 @@ namespace FilterDesignatedHeader
                         sheet = (Excel.Worksheet)_Excel.Sheets[item.SheetName];
                         sheet.Activate();
                         listBox_SelectItems.Items.Add(item.HeaderItem);
+
+                        Excel.Range allRange = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
+                        int lastRow = allRange.Row;
+                        int lastColumn = allRange.Column;
+                        //將Excel存入object, 再存入DataTable
+                        object[,] cellValues = (object[,])sheet.Range[(Excel.Range)sheet.Cells[1, 1], (Excel.Range)sheet.Cells[lastRow, lastColumn]].Value2;
+                        dt = cellValues.ToDataTable();
                     }
                 }
                 if (_Excel.Visible == false)
@@ -139,7 +156,7 @@ namespace FilterDesignatedHeader
         {
             try
             {
-                if (listBox_SelectItems.SelectedItems.Count != 0)
+                if (textBox_Input.Text.Trim() != string.Empty)
                 {
                     getOutputs();
                     this._Excel.Visible = true;
@@ -171,8 +188,10 @@ namespace FilterDesignatedHeader
             
         }
 
+        #endregion
 
 
+        #region Methods
 
         private void checkTopmost()
         {
@@ -183,6 +202,18 @@ namespace FilterDesignatedHeader
             else
             {
                 this.TopMost = false;
+            }
+        }
+
+        private void checkFilter()
+        {
+            if (checkBox_Filter.Checked)
+            {
+                isFilter = true;
+            }
+            else
+            {
+                isFilter = false;
             }
         }
 
@@ -254,61 +285,125 @@ namespace FilterDesignatedHeader
         {
             List<string> results = new List<string>();
 
-            sheet.Activate();
-            sheet.Application.ActiveWindow.FreezePanes = false;
-            sheet.Application.ActiveWindow.SplitRow = 1;
-            sheet.Application.ActiveWindow.FreezePanes = true;
-
-            string[] separator = { "," };
+            string[] separator = { ",", " " };
             string[] selectedItems = textBox_Input.Text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
-            if (sheet.AutoFilter != null)
-            {
-                sheet.AutoFilterMode = false;
-            }
+            textBox_Output.Text = string.Empty;
 
-            //Excel.Range firstRow = sheet.Range["1:1"];
-            int totalColumns = sheet.UsedRange.Columns.Count;
-            int totalRows = sheet.UsedRange.Rows.Count;
-            //篩選
-            for (int i = 1; i <= totalColumns; i++)
+            if (isFilter)
             {
-                range = (Excel.Range)sheet.Cells[1, i];
-                foreach (var item in selectedItems)
+                sheet.Activate();
+                sheet.Application.ActiveWindow.FreezePanes = false;
+                sheet.Application.ActiveWindow.SplitRow = 1;
+                sheet.Application.ActiveWindow.FreezePanes = true;
+
+                if (sheet.AutoFilter != null) { sheet.AutoFilterMode = false; }
+
+                //Excel.Range firstRow = sheet.Range["1:1"];
+                int totalColumns = sheet.UsedRange.Columns.Count;
+                int totalRows = sheet.UsedRange.Rows.Count;
+
+                //篩選
+                for (int i = 1; i <= totalColumns; i++)
                 {
+                    range = (Excel.Range)sheet.Cells[1, i];
+                    foreach (var item in selectedItems)
+                    {
+                        if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
+                        {
+                            if (range.Value2.ToString().Trim() == item.Trim())
+                            {
+                                sheet.UsedRange.AutoFilter(i, "<>", Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
+                            }
+                        }
+                    }
+                }
+
+                //取得結果
+                for (int col = 1; col <= totalColumns; col++)
+                {
+                    range = (Excel.Range)sheet.Cells[1, col];
                     if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
                     {
-                        if (range.Value2.ToString().Trim() == item.Trim())
+                        if (range.Value2.ToString().Trim() == "結果" || range.Value2.ToString().Trim().ToUpper() == "RESULT")
                         {
-                            sheet.UsedRange.AutoFilter(i, "<>", Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
+                            for (int row = 2; row <= totalRows; row++)
+                            {
+                                //MessageBox.Show(sheet.Cells[row, col].Address(false, false));
+
+                                if (sheet.Rows[row].Hidden == false && sheet.Cells[row, col].Value2 != null && sheet.Cells[row, col].Value2.ToString().Trim() != string.Empty)
+                                {
+                                    if (textBox_Output.Text.Trim() == string.Empty)
+                                    {
+                                        textBox_Output.Text = sheet.Cells[row, col].Value2.ToString().Trim();
+                                    }
+                                    else
+                                    {
+                                        textBox_Output.Text += "\r\n" + sheet.Cells[row, col].Value2.ToString().Trim();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-            textBox_Output.Text = string.Empty;
-            //取得結果
-            for (int col = 1; col <= totalColumns; col++)
+            else
             {
-                range = (Excel.Range)sheet.Cells[1, col];
-                if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
-                {
-                    if (range.Value2.ToString().Trim() == "結果" || range.Value2.ToString().Trim().ToUpper() == "RESULT")
-                    {
-                        for (int row = 2; row <= totalRows; row++)
-                        {
-                            //MessageBox.Show(sheet.Cells[row, col].Address(false, false));
+                int dataTableColCount = dt.Columns.Count;
+                int dataTableRowCount = dt.Rows.Count;
+                int resultIndex = 0;
 
-                            if (sheet.Rows[row].Hidden == false && sheet.Cells[row, col].Value2 != null && sheet.Cells[row, col].Value2.ToString().Trim() != string.Empty)
+                //先取得結果欄位Index
+                for (int col = 0; col < dataTableColCount; col++)
+                {
+                    if (dt.Columns[col].ColumnName == "結果" || dt.Columns[col].ColumnName.ToUpper() == "RESULT")
+                    {
+                        resultIndex = col;
+                    }
+                }
+
+                //取得符合選擇項目的match list
+                List<MatchItems> matchResults = new List<MatchItems>();
+                for (int col = 0; col < dataTableColCount; col++)
+                {
+                    for (int row = 0; row < dataTableRowCount; row++)
+                    {
+                        //MessageBox.Show($"[{row + 1}:{col + 1}] ({dt.Rows[row].Table.Columns[col].ColumnName}) : " + dt.Rows[row][col].ToString().Trim());
+
+                        foreach (var item in selectedItems)
+                        {
+                            if (item == dt.Rows[row].Table.Columns[col].ColumnName && dt.Rows[row][col].ToString().Trim() != string.Empty)
                             {
-                                if (textBox_Output.Text.Trim() == string.Empty)
+                                matchResults.Add(new MatchItems()
                                 {
-                                    textBox_Output.Text = sheet.Cells[row, col].Value2.ToString().Trim();
-                                }
-                                else
-                                {
-                                    textBox_Output.Text += "\r\n" + sheet.Cells[row, col].Value2.ToString().Trim();
-                                }
+                                    SelectedHeader = dt.Rows[row].Table.Columns[col].ColumnName,
+                                    MatchIndex = row,
+                                    MatchItem = dt.Rows[row][col].ToString().Trim(),
+                                    Result = dt.Rows[row][resultIndex].ToString().Trim()
+                                });
                             }
+                        }
+                    }
+                    //matchResults = matchResults.Distinct().ToList();
+                }
+
+                //確認row中出現數目與選擇數目相同則輸出
+                for (int row = 0; row < dataTableRowCount; row++)
+                {
+                    int i = 0;
+                    foreach (var item in matchResults)
+                    {
+                        if (item.MatchIndex == row) { i++; }
+                    }
+                    if (i == selectedItems.Length)
+                    {
+                        if (textBox_Output.Text.Trim() == string.Empty)
+                        {
+                            textBox_Output.Text = dt.Rows[row][resultIndex].ToString().Trim();
+                        }
+                        else
+                        {
+                            textBox_Output.Text += "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
                         }
                     }
                 }
@@ -323,6 +418,7 @@ namespace FilterDesignatedHeader
         //    }
         //}
 
+        #endregion
         
     }
 }
