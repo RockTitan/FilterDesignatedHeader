@@ -248,6 +248,7 @@ namespace FilterDesignatedHeader
 
         private void getSheetsName()
         {
+            comboBox_Sheet.Items.Clear();
             sheet = null;
             string path = label_File.Text;
             try
@@ -356,7 +357,7 @@ namespace FilterDesignatedHeader
                 //先取得結果欄位Index
                 for (int col = 0; col < dataTableColCount; col++)
                 {
-                    if (dt.Columns[col].ColumnName == "結果" || dt.Columns[col].ColumnName.ToUpper() == "RESULT")
+                    if (dt.Columns[col].ColumnName.ToUpper().Contains(textBox_OutputHeader.Text.Trim()))
                     {
                         resultIndex = col;
                     }
@@ -403,7 +404,7 @@ namespace FilterDesignatedHeader
                         }
                         else
                         {
-                            textBox_Output.Text += "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
+                            textBox_Output.Text += dt.Rows[row][resultIndex].ToString().Trim() == string.Empty ? string.Empty : "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
                         }
                     }
                 }

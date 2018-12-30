@@ -45,6 +45,8 @@
             this.contextMenuStrip_Output = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox_Filter = new System.Windows.Forms.CheckBox();
+            this.label_OutputHeader = new System.Windows.Forms.Label();
+            this.textBox_OutputHeader = new System.Windows.Forms.TextBox();
             this.groupBox_SelectInput.SuspendLayout();
             this.groupBox_Output.SuspendLayout();
             this.contextMenuStrip_Output.SuspendLayout();
@@ -54,7 +56,7 @@
             // 
             this.button_Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_Exit.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Exit.Location = new System.Drawing.Point(472, 518);
+            this.button_Exit.Location = new System.Drawing.Point(472, 565);
             this.button_Exit.Name = "button_Exit";
             this.button_Exit.Size = new System.Drawing.Size(100, 35);
             this.button_Exit.TabIndex = 0;
@@ -83,9 +85,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox_Sheet.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox_Sheet.FormattingEnabled = true;
-            this.comboBox_Sheet.Location = new System.Drawing.Point(128, 102);
+            this.comboBox_Sheet.Location = new System.Drawing.Point(140, 102);
             this.comboBox_Sheet.Name = "comboBox_Sheet";
-            this.comboBox_Sheet.Size = new System.Drawing.Size(329, 27);
+            this.comboBox_Sheet.Size = new System.Drawing.Size(317, 27);
             this.comboBox_Sheet.TabIndex = 2;
             this.comboBox_Sheet.SelectedIndexChanged += new System.EventHandler(this.comboBox_Sheet_SelectedIndexChanged);
             // 
@@ -94,9 +96,9 @@
             this.textBox_Input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Input.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Input.Location = new System.Drawing.Point(128, 141);
+            this.textBox_Input.Location = new System.Drawing.Point(140, 141);
             this.textBox_Input.Name = "textBox_Input";
-            this.textBox_Input.Size = new System.Drawing.Size(329, 27);
+            this.textBox_Input.Size = new System.Drawing.Size(317, 27);
             this.textBox_Input.TabIndex = 3;
             this.textBox_Input.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox_Input_MouseClick);
             this.textBox_Input.TextChanged += new System.EventHandler(this.textBox_Input_TextChanged);
@@ -142,9 +144,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox_SelectInput.Controls.Add(this.listBox_SelectItems);
             this.groupBox_SelectInput.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_SelectInput.Location = new System.Drawing.Point(12, 185);
+            this.groupBox_SelectInput.Location = new System.Drawing.Point(12, 221);
             this.groupBox_SelectInput.Name = "groupBox_SelectInput";
-            this.groupBox_SelectInput.Size = new System.Drawing.Size(216, 327);
+            this.groupBox_SelectInput.Size = new System.Drawing.Size(216, 325);
             this.groupBox_SelectInput.TabIndex = 8;
             this.groupBox_SelectInput.TabStop = false;
             this.groupBox_SelectInput.Text = "Select Input Headers";
@@ -156,9 +158,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_Output.Controls.Add(this.textBox_Output);
             this.groupBox_Output.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_Output.Location = new System.Drawing.Point(234, 185);
+            this.groupBox_Output.Location = new System.Drawing.Point(234, 221);
             this.groupBox_Output.Name = "groupBox_Output";
-            this.groupBox_Output.Size = new System.Drawing.Size(338, 327);
+            this.groupBox_Output.Size = new System.Drawing.Size(338, 325);
             this.groupBox_Output.TabIndex = 9;
             this.groupBox_Output.TabStop = false;
             this.groupBox_Output.Text = "Outputs";
@@ -171,7 +173,7 @@
             this.textBox_Output.Location = new System.Drawing.Point(6, 26);
             this.textBox_Output.Multiline = true;
             this.textBox_Output.Name = "textBox_Output";
-            this.textBox_Output.Size = new System.Drawing.Size(326, 289);
+            this.textBox_Output.Size = new System.Drawing.Size(326, 293);
             this.textBox_Output.TabIndex = 0;
             // 
             // button_SelectFile
@@ -220,11 +222,34 @@
             this.checkBox_Filter.UseVisualStyleBackColor = true;
             this.checkBox_Filter.CheckedChanged += new System.EventHandler(this.checkBox_Filter_CheckedChanged);
             // 
+            // label_OutputHeader
+            // 
+            this.label_OutputHeader.AutoSize = true;
+            this.label_OutputHeader.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_OutputHeader.Location = new System.Drawing.Point(14, 182);
+            this.label_OutputHeader.Name = "label_OutputHeader";
+            this.label_OutputHeader.Size = new System.Drawing.Size(120, 19);
+            this.label_OutputHeader.TabIndex = 13;
+            this.label_OutputHeader.Text = "Output Headers :";
+            // 
+            // textBox_OutputHeader
+            // 
+            this.textBox_OutputHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_OutputHeader.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_OutputHeader.Location = new System.Drawing.Point(140, 179);
+            this.textBox_OutputHeader.Name = "textBox_OutputHeader";
+            this.textBox_OutputHeader.Size = new System.Drawing.Size(317, 27);
+            this.textBox_OutputHeader.TabIndex = 14;
+            this.textBox_OutputHeader.Text = "結果";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 564);
+            this.ClientSize = new System.Drawing.Size(584, 611);
+            this.Controls.Add(this.textBox_OutputHeader);
+            this.Controls.Add(this.label_OutputHeader);
             this.Controls.Add(this.checkBox_Filter);
             this.Controls.Add(this.label_File);
             this.Controls.Add(this.button_SelectFile);
@@ -237,7 +262,7 @@
             this.Controls.Add(this.comboBox_Sheet);
             this.Controls.Add(this.button_Exit);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(600, 603);
+            this.MinimumSize = new System.Drawing.Size(600, 650);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filter Tool";
@@ -268,6 +293,8 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.TextBox textBox_Output;
         private System.Windows.Forms.CheckBox checkBox_Filter;
+        private System.Windows.Forms.Label label_OutputHeader;
+        private System.Windows.Forms.TextBox textBox_OutputHeader;
     }
 }
 
