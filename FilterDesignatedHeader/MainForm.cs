@@ -137,36 +137,36 @@ namespace FilterDesignatedHeader
 
         private void listBox_SelectItems_SelectedValueChanged(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 textBox_Input.Text = string.Empty;
                 foreach (var item in listBox_SelectItems.SelectedItems)
                 {
                     textBox_Input.Text = (textBox_Input.Text == string.Empty ? textBox_Input.Text : textBox_Input.Text + ", ") + item.ToString();
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    //throw;
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //throw;
+            }
         }
 
         private void textBox_Input_TextChanged(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 if (textBox_Input.Text.Trim() != string.Empty)
                 {
                     getOutputs();
                     this._Excel.Visible = true;
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    //throw;
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //throw;
+            }
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
