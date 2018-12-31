@@ -47,6 +47,10 @@
             this.checkBox_Filter = new System.Windows.Forms.CheckBox();
             this.label_OutputHeader = new System.Windows.Forms.Label();
             this.textBox_OutputHeader = new System.Windows.Forms.TextBox();
+            this.radioButton_ResultTable = new System.Windows.Forms.RadioButton();
+            this.radioButton_OriginalTable = new System.Windows.Forms.RadioButton();
+            this.label_Comb = new System.Windows.Forms.Label();
+            this.textBox_Comb = new System.Windows.Forms.TextBox();
             this.groupBox_SelectInput.SuspendLayout();
             this.groupBox_Output.SuspendLayout();
             this.contextMenuStrip_Output.SuspendLayout();
@@ -56,7 +60,7 @@
             // 
             this.button_Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_Exit.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Exit.Location = new System.Drawing.Point(472, 565);
+            this.button_Exit.Location = new System.Drawing.Point(472, 595);
             this.button_Exit.Name = "button_Exit";
             this.button_Exit.Size = new System.Drawing.Size(100, 35);
             this.button_Exit.TabIndex = 0;
@@ -96,7 +100,7 @@
             this.textBox_Input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Input.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Input.Location = new System.Drawing.Point(140, 141);
+            this.textBox_Input.Location = new System.Drawing.Point(140, 219);
             this.textBox_Input.Name = "textBox_Input";
             this.textBox_Input.Size = new System.Drawing.Size(317, 27);
             this.textBox_Input.TabIndex = 3;
@@ -132,7 +136,7 @@
             // 
             this.label_Input.AutoSize = true;
             this.label_Input.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Input.Location = new System.Drawing.Point(14, 144);
+            this.label_Input.Location = new System.Drawing.Point(14, 222);
             this.label_Input.Name = "label_Input";
             this.label_Input.Size = new System.Drawing.Size(108, 19);
             this.label_Input.TabIndex = 7;
@@ -144,9 +148,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox_SelectInput.Controls.Add(this.listBox_SelectItems);
             this.groupBox_SelectInput.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_SelectInput.Location = new System.Drawing.Point(12, 221);
+            this.groupBox_SelectInput.Location = new System.Drawing.Point(12, 258);
             this.groupBox_SelectInput.Name = "groupBox_SelectInput";
-            this.groupBox_SelectInput.Size = new System.Drawing.Size(216, 325);
+            this.groupBox_SelectInput.Size = new System.Drawing.Size(216, 326);
             this.groupBox_SelectInput.TabIndex = 8;
             this.groupBox_SelectInput.TabStop = false;
             this.groupBox_SelectInput.Text = "Select Input Headers";
@@ -158,9 +162,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_Output.Controls.Add(this.textBox_Output);
             this.groupBox_Output.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_Output.Location = new System.Drawing.Point(234, 221);
+            this.groupBox_Output.Location = new System.Drawing.Point(234, 258);
             this.groupBox_Output.Name = "groupBox_Output";
-            this.groupBox_Output.Size = new System.Drawing.Size(338, 325);
+            this.groupBox_Output.Size = new System.Drawing.Size(338, 326);
             this.groupBox_Output.TabIndex = 9;
             this.groupBox_Output.TabStop = false;
             this.groupBox_Output.Text = "Outputs";
@@ -173,7 +177,7 @@
             this.textBox_Output.Location = new System.Drawing.Point(6, 26);
             this.textBox_Output.Multiline = true;
             this.textBox_Output.Name = "textBox_Output";
-            this.textBox_Output.Size = new System.Drawing.Size(326, 293);
+            this.textBox_Output.Size = new System.Drawing.Size(326, 289);
             this.textBox_Output.TabIndex = 0;
             // 
             // button_SelectFile
@@ -228,9 +232,9 @@
             this.label_OutputHeader.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_OutputHeader.Location = new System.Drawing.Point(14, 182);
             this.label_OutputHeader.Name = "label_OutputHeader";
-            this.label_OutputHeader.Size = new System.Drawing.Size(120, 19);
+            this.label_OutputHeader.Size = new System.Drawing.Size(113, 19);
             this.label_OutputHeader.TabIndex = 13;
-            this.label_OutputHeader.Text = "Output Headers :";
+            this.label_OutputHeader.Text = "Output Header :";
             // 
             // textBox_OutputHeader
             // 
@@ -243,11 +247,59 @@
             this.textBox_OutputHeader.TabIndex = 14;
             this.textBox_OutputHeader.Text = "結果";
             // 
+            // radioButton_ResultTable
+            // 
+            this.radioButton_ResultTable.AutoSize = true;
+            this.radioButton_ResultTable.Checked = true;
+            this.radioButton_ResultTable.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_ResultTable.Location = new System.Drawing.Point(234, 17);
+            this.radioButton_ResultTable.Name = "radioButton_ResultTable";
+            this.radioButton_ResultTable.Size = new System.Drawing.Size(107, 23);
+            this.radioButton_ResultTable.TabIndex = 15;
+            this.radioButton_ResultTable.Text = "Result Table";
+            this.radioButton_ResultTable.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_OriginalTable
+            // 
+            this.radioButton_OriginalTable.AutoSize = true;
+            this.radioButton_OriginalTable.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_OriginalTable.Location = new System.Drawing.Point(347, 17);
+            this.radioButton_OriginalTable.Name = "radioButton_OriginalTable";
+            this.radioButton_OriginalTable.Size = new System.Drawing.Size(118, 23);
+            this.radioButton_OriginalTable.TabIndex = 16;
+            this.radioButton_OriginalTable.Text = "Original Table";
+            this.radioButton_OriginalTable.UseVisualStyleBackColor = true;
+            // 
+            // label_Comb
+            // 
+            this.label_Comb.AutoSize = true;
+            this.label_Comb.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Comb.Location = new System.Drawing.Point(14, 144);
+            this.label_Comb.Name = "label_Comb";
+            this.label_Comb.Size = new System.Drawing.Size(103, 19);
+            this.label_Comb.TabIndex = 18;
+            this.label_Comb.Text = "Input Column :";
+            // 
+            // textBox_Comb
+            // 
+            this.textBox_Comb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_Comb.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Comb.Location = new System.Drawing.Point(140, 141);
+            this.textBox_Comb.Name = "textBox_Comb";
+            this.textBox_Comb.Size = new System.Drawing.Size(317, 27);
+            this.textBox_Comb.TabIndex = 17;
+            this.textBox_Comb.Text = "組合";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 611);
+            this.ClientSize = new System.Drawing.Size(584, 641);
+            this.Controls.Add(this.label_Comb);
+            this.Controls.Add(this.textBox_Comb);
+            this.Controls.Add(this.radioButton_OriginalTable);
+            this.Controls.Add(this.radioButton_ResultTable);
             this.Controls.Add(this.textBox_OutputHeader);
             this.Controls.Add(this.label_OutputHeader);
             this.Controls.Add(this.checkBox_Filter);
@@ -262,7 +314,7 @@
             this.Controls.Add(this.comboBox_Sheet);
             this.Controls.Add(this.button_Exit);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(600, 650);
+            this.MinimumSize = new System.Drawing.Size(600, 680);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filter Tool";
@@ -295,6 +347,10 @@
         private System.Windows.Forms.CheckBox checkBox_Filter;
         private System.Windows.Forms.Label label_OutputHeader;
         private System.Windows.Forms.TextBox textBox_OutputHeader;
+        private System.Windows.Forms.RadioButton radioButton_ResultTable;
+        private System.Windows.Forms.RadioButton radioButton_OriginalTable;
+        private System.Windows.Forms.Label label_Comb;
+        private System.Windows.Forms.TextBox textBox_Comb;
     }
 }
 

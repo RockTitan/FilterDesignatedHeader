@@ -137,36 +137,36 @@ namespace FilterDesignatedHeader
 
         private void listBox_SelectItems_SelectedValueChanged(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 textBox_Input.Text = string.Empty;
                 foreach (var item in listBox_SelectItems.SelectedItems)
                 {
                     textBox_Input.Text = (textBox_Input.Text == string.Empty ? textBox_Input.Text : textBox_Input.Text + ", ") + item.ToString();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //throw;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    //throw;
+            //}
         }
 
         private void textBox_Input_TextChanged(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 if (textBox_Input.Text.Trim() != string.Empty)
                 {
                     getOutputs();
                     this._Excel.Visible = true;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //throw;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    //throw;
+            //}
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -253,6 +253,7 @@ namespace FilterDesignatedHeader
             string path = label_File.Text;
             try
             {
+                sheetItems.Clear();
                 book = _Excel.Workbooks.Open(path);
                 for (int i = 1; i <= book.Sheets.Count; i++)
                 {
@@ -260,20 +261,53 @@ namespace FilterDesignatedHeader
                     comboBox_Sheet.Items.Add(sheet.Name);
 
                     int totalColumns = sheet.UsedRange.Columns.Count;
+                    int totalRows = sheet.UsedRange.Rows.Count;
 
-                    for (int col = 1; col <= totalColumns; col++)
+                    if (radioButton_ResultTable.Checked)
                     {
-                        range = (Excel.Range)sheet.Cells[1, col];
-                        if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
+                        int inputColIndex = 1;
+
+                        //先取得輸入欄位Index
+                        for (int col = 1; col <= totalColumns; col++)
                         {
-                            sheetItems.Add(new SheetItems()
+                            range = (Excel.Range)sheet.Cells[1, col];
+                            if (range.Value2.ToString().ToUpper().Contains(textBox_Comb.Text.Trim().ToUpper()))
                             {
-                                SheetName = sheet.Name,
-                                HeaderItem = range.Value2.ToString().Trim()
-                            });
+                                inputColIndex = col;
+                            }
+                        }
+
+                        //填入篩選項目
+                        for (int row = 2; row <= totalRows; row++)
+                        {
+                            range = (Excel.Range)sheet.Cells[row, inputColIndex];
+                            if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
+                            {
+                                sheetItems.Add(new SheetItems()
+                                {
+                                    SheetName = sheet.Name,
+                                    HeaderItem = range.Value2.ToString().Trim()
+                                });
+                            }
+                        }
+                    }
+                    else if (radioButton_OriginalTable.Checked)
+                    {
+                        for (int col = 1; col <= totalColumns; col++)
+                        {
+                            range = (Excel.Range)sheet.Cells[1, col];
+                            if (range.Value2 != null && range.Value2.ToString().Trim() != string.Empty)
+                            {
+                                sheetItems.Add(new SheetItems()
+                                {
+                                    SheetName = sheet.Name,
+                                    HeaderItem = range.Value2.ToString().Trim()
+                                });
+                            }
                         }
                     }
                 }
+                sheetItems = sheetItems.Distinct(new SheetItemsComparer()).ToList();
             }
             finally
             {
@@ -286,7 +320,15 @@ namespace FilterDesignatedHeader
         {
             List<string> results = new List<string>();
 
-            string[] separator = { ",", " " };
+            string[] separator = { };
+            if (radioButton_ResultTable.Checked)
+            {
+                separator = new string[] { "," };
+            }
+            else if (radioButton_OriginalTable.Checked)
+            {
+                separator = new string[] { ",", " " };
+            }
             string[] selectedItems = textBox_Input.Text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
             textBox_Output.Text = string.Empty;
@@ -353,11 +395,12 @@ namespace FilterDesignatedHeader
                 int dataTableColCount = dt.Columns.Count;
                 int dataTableRowCount = dt.Rows.Count;
                 int resultIndex = 0;
+                int inputColIndex = 0;
 
                 //先取得結果欄位Index
                 for (int col = 0; col < dataTableColCount; col++)
                 {
-                    if (dt.Columns[col].ColumnName.ToUpper().Contains(textBox_OutputHeader.Text.Trim()))
+                    if (dt.Columns[col].ColumnName.ToUpper().Contains(textBox_OutputHeader.Text.Trim().ToUpper()))
                     {
                         resultIndex = col;
                     }
@@ -365,46 +408,80 @@ namespace FilterDesignatedHeader
 
                 //取得符合選擇項目的match list
                 List<MatchItems> matchResults = new List<MatchItems>();
-                for (int col = 0; col < dataTableColCount; col++)
+                if (radioButton_ResultTable.Checked)
                 {
+                    //先取得輸入欄位Index
+                    for (int col = 0; col < dataTableColCount; col++)
+                    {
+                        if (dt.Columns[col].ColumnName.ToUpper().Contains(textBox_Comb.Text.Trim().ToUpper()))
+                        {
+                            inputColIndex = col;
+                        }
+                    }
+
                     for (int row = 0; row < dataTableRowCount; row++)
                     {
                         //MessageBox.Show($"[{row + 1}:{col + 1}] ({dt.Rows[row].Table.Columns[col].ColumnName}) : " + dt.Rows[row][col].ToString().Trim());
 
                         foreach (var item in selectedItems)
                         {
-                            if (item == dt.Rows[row].Table.Columns[col].ColumnName && dt.Rows[row][col].ToString().Trim() != string.Empty)
+                            if (item == dt.Rows[row][inputColIndex].ToString().Trim() && dt.Rows[row][inputColIndex].ToString().Trim() != string.Empty)
                             {
-                                matchResults.Add(new MatchItems()
+                                if (textBox_Output.Text.Trim() == string.Empty)
                                 {
-                                    SelectedHeader = dt.Rows[row].Table.Columns[col].ColumnName,
-                                    MatchIndex = row,
-                                    MatchItem = dt.Rows[row][col].ToString().Trim(),
-                                    Result = dt.Rows[row][resultIndex].ToString().Trim()
-                                });
+                                    textBox_Output.Text = dt.Rows[row][resultIndex].ToString().Trim();
+                                }
+                                else
+                                {
+                                    textBox_Output.Text += dt.Rows[row][resultIndex].ToString().Trim() == string.Empty ? string.Empty : "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
+                                }
                             }
                         }
                     }
-                    //matchResults = matchResults.Distinct().ToList();
                 }
-
-                //確認row中出現數目與選擇數目相同則輸出
-                for (int row = 0; row < dataTableRowCount; row++)
+                else if (radioButton_OriginalTable.Checked)
                 {
-                    int i = 0;
-                    foreach (var item in matchResults)
+                    for (int col = 0; col < dataTableColCount; col++)
                     {
-                        if (item.MatchIndex == row) { i++; }
-                    }
-                    if (i == selectedItems.Length)
-                    {
-                        if (textBox_Output.Text.Trim() == string.Empty)
+                        for (int row = 0; row < dataTableRowCount; row++)
                         {
-                            textBox_Output.Text = dt.Rows[row][resultIndex].ToString().Trim();
+                            //MessageBox.Show($"[{row + 1}:{col + 1}] ({dt.Rows[row].Table.Columns[col].ColumnName}) : " + dt.Rows[row][col].ToString().Trim());
+
+                            foreach (var item in selectedItems)
+                            {
+                                if (item == dt.Rows[row].Table.Columns[col].ColumnName && dt.Rows[row][col].ToString().Trim() != string.Empty)
+                                {
+                                    matchResults.Add(new MatchItems()
+                                    {
+                                        SelectedHeader = dt.Rows[row].Table.Columns[col].ColumnName,
+                                        MatchIndex = row,
+                                        MatchItem = dt.Rows[row][col].ToString().Trim(),
+                                        Result = dt.Rows[row][resultIndex].ToString().Trim()
+                                    });
+                                }
+                            }
                         }
-                        else
+                        //matchResults = matchResults.Distinct().ToList();
+                    }
+
+                    //確認row中出現數目與選擇數目相同則輸出
+                    for (int row = 0; row < dataTableRowCount; row++)
+                    {
+                        int i = 0;
+                        foreach (var item in matchResults)
                         {
-                            textBox_Output.Text += dt.Rows[row][resultIndex].ToString().Trim() == string.Empty ? string.Empty : "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
+                            if (item.MatchIndex == row) { i++; }
+                        }
+                        if (i == selectedItems.Length)
+                        {
+                            if (textBox_Output.Text.Trim() == string.Empty)
+                            {
+                                textBox_Output.Text = dt.Rows[row][resultIndex].ToString().Trim();
+                            }
+                            else
+                            {
+                                textBox_Output.Text += dt.Rows[row][resultIndex].ToString().Trim() == string.Empty ? string.Empty : "\r\n" + dt.Rows[row][resultIndex].ToString().Trim();
+                            }
                         }
                     }
                 }

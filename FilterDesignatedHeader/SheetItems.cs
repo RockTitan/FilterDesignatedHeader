@@ -12,6 +12,18 @@ namespace FilterDesignatedHeader
         public string HeaderItem { get; set; }
     }
 
+    public class SheetItemsComparer : IEqualityComparer<SheetItems>
+    {
+        public bool Equals(SheetItems x, SheetItems y)
+        {
+            return x.HeaderItem.ToUpper() == y.HeaderItem.ToUpper();
+        }
+        public int GetHashCode(SheetItems obj)
+        {
+            return obj.HeaderItem.ToUpper().GetHashCode();
+        }
+    }
+
     public class MatchItems
     {
         public string SelectedHeader { get; set; }
